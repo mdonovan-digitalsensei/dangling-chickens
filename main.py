@@ -1,6 +1,7 @@
 import os
 from random import seed
 from random import randint
+import csv
 
 clear = lambda: os.system('clear')  #on Linux System
 
@@ -56,12 +57,14 @@ class Monster:
     my_health = int
     my_attack = int
     my_dmg = int
+    my_index = int
 
-    def __init__(self, name, health, attack, dmg):
+    def __init__(self, name, health, attack, dmg, index):
         self.my_name = name
-        self.my_health = health
-        self.my_attack = attack
-        self.my_dmg = dmg
+        self.my_health = int(health)
+        self.my_attack = int(attack)
+        self.my_dmg = int(dmg)
+        self.my_index = int(index)
 
     def return_name(self):
         return self.my_name
@@ -74,6 +77,9 @@ class Monster:
 
     def return_dmg(self):
         return self.my_dmg
+
+    def return_index(self):
+        return self.my_index
 
     def take_damage(self, dmg):
         self.my_health -= dmg
@@ -138,9 +144,16 @@ class Inventory:
 
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
-monsterlist = [Monster("goblin", 2, 1, 1), Monster("imp", 3, 2, 1)]
 weaponlist = [[0, "knife", 1], [1, "blunt short sword", 2]]
 itemslist = [[0, "Health Potion"], [1, "Nothing"]]
+
+monsterlist = []
+with open("monsters.csv") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+        print(row)
+        monsterlist.append(Monster(*row))
 
 new_game = Game()
 new_game.setup()
