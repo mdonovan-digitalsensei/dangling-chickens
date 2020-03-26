@@ -89,7 +89,16 @@ class Inventory:
   def __init__(self):
     pass
   def add_item(self,index,number):
-    self.my_items.append([index,number])
+    i = 0
+    if self.my_items:
+      for item in self.my_items:
+        if item[0]==index:
+          self.my_items[i][1] += number
+        else:
+          self.my_items.append([index,number])
+    else:
+      self.my_items.append([index,number])
+    
   def remove_item(self,index,number):
     i = 0
     for item in self.my_items:
@@ -98,7 +107,7 @@ class Inventory:
         if self.my_items[i][1] <= 0:
           del self.my_items[i]
           break
-    return False
+
   def show_items(self):
     return self.my_items
 
@@ -114,8 +123,13 @@ mindex = 0
 rindex = 0
 
 player_inv = Inventory()
+player_inv.add_item(0,1)
 
 player_inv.add_item(0,1)
+
+player_inv.add_item(0,1)
+
+
 
 print("Input your heroes name: ")
 player_name = input("name: ")
@@ -144,10 +158,12 @@ while True:
     print("End Game")
     break
   elif action == "i":
+    print("*** Inventory ***")
     for item in player_inv.show_items():
       itemName = itemslist[item[0]][1]
       itemNumber = item[1]
       print(f"You have {itemNumber} {itemName}")
+    print("*** Inventory ***")
 
   elif action == "a":
     clear()
