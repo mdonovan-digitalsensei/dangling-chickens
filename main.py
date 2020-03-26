@@ -11,6 +11,7 @@ class Player:
   my_health = int
   my_attack = int
   my_weapon = int
+  my_gold = int
 
   def __init__(self,name,role,health,attack,weapon):
     self.my_name = name
@@ -19,6 +20,8 @@ class Player:
     self.my_health = health
     self.my_attack = attack
     self.my_weapon = weapon
+    self.my_gold = 0
+    
   def return_name(self):
     return self.my_name
   def return_role(self):
@@ -35,7 +38,9 @@ class Player:
     return randint(0,6) + self.my_attack
   def take_damage(self,dmg):
     self.my_health -= dmg
-
+  def heal_damage(self,heal):
+    self.my_health += heal
+  
 class Monster:
   my_name = str
   my_health = int
@@ -57,6 +62,8 @@ class Monster:
     return self.my_dmg
   def take_damage(self,dmg):
     self.my_health -= dmg
+  def heal_damage(self,heal):
+    self.my_health += heal
   
 class Player_role:
   def __init__(self,name,health,attack):
@@ -77,16 +84,38 @@ class Game:
   def return_level(self):
     return self.glevel
 
+class Inventory:
+  my_items = []
+  def __init__(self):
+    pass
+  def add_item(self,index,number):
+    self.my_items.append([index,number])
+  def remove_item(self,index,number):
+    i = 0
+    for item in self.my_items:
+      if item[0]==index:
+        self.my_items[i][1] -= number
+        if self.my_items[i][1] <= 0:
+          del self.my_items[i]
+          break
+    return False
+  def show_items(self):
+    return self.my_items
+
 role = [["cadet",5,3,0],["recruit",10,2,0]]
 monsterlist = [Monster("goblin",2,1,1),Monster("imp",3,2,1)]
 weaponlist = [[0,"knife",1],[1,"blunt short sword",2]]
-
+itemslist = [[0,"Health Potion"],[1,"Nothing"]]
 
 new_game = Game()
 new_game.setup()
 seed(1)
 mindex = 0
 rindex = 0
+
+player_inv = Inventory()
+
+player_inv.add_item(0,1)
 
 print("Input your heroes name: ")
 player_name = input("name: ")
@@ -97,8 +126,6 @@ while True:
   pwpn = weaponlist[nobody.return_weapon()][1]
   pdmg = weaponlist[nobody.return_weapon()][2]
   
-  
-
   print(f"{nobody.return_name()} you are a {nobody.return_role()}")
   print(f"Current Health: {nobody.return_health()}")
   print(f"Current Attack: {nobody.return_attack()}")
@@ -110,11 +137,18 @@ while True:
   print("Type q to quit any other to continue")
   print("Type q to quit")
   print("Type a to attack")
+  print("Type i to view inventory")
   action = input()
   
   if action == "q":
     print("End Game")
     break
+  elif action == "i":
+    for item in player_inv.show_items():
+      itemName = itemslist[item[0]][1]
+      itemNumber = item[1]
+      print(f"You have {itemNumber} {itemName}")
+
   elif action == "a":
     clear()
     attackroll = nobody.attack()
