@@ -1,6 +1,7 @@
 import os
 from random import seed
 from random import randint
+import readchar
 import csv
 import player
 import monster
@@ -108,7 +109,7 @@ while True:
     print("Type q to quit")
     print("Type a to attack")
     print("Type i to view inventory")
-    action = input()
+    action = readchar.readchar()
 
     if action == "q":
         print("End Game")

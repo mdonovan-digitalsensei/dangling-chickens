@@ -1,0 +1,14 @@
+[[package]]
+category = "main"
+description = "Utilities to read single characters and key-strokes"
+name = "readchar"
+optional = false
+python-versions = "*"
+version = "2.0.1"
+
+[metadata]
+content-hash = "355cc4d7c1d90c5cd67847ca4439902135054cb8ffc3d8a84f8a550b2b3acd17"
+python-versions = "^3.7"
+
+[metadata.hashes]
+readchar = ["3ac34aab28563bc895f73233d5c08b28f951ca190d5850b8d4bec973132a8dca", "ed00b7a49bb12f345319d9fa393f289f03670310ada2beb55e8c3f017c648f1e"]
