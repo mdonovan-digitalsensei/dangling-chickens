@@ -3,53 +3,10 @@ from random import seed
 from random import randint
 import csv
 import player
+import monster
+import inventory
 
 clear = lambda: os.system('clear')  #on Linux System
-
-
-
-
-
-class Monster:
-    my_name = str
-    my_health = int
-    my_attack = int
-    my_dmg = int
-    my_index = int
-    my_loot = int
-
-    def __init__(self, name, health, attack, dmg, index, loot):
-        self.my_name = name
-        self.my_health = int(health)
-        self.my_attack = int(attack)
-        self.my_dmg = int(dmg)
-        self.my_index = int(index)
-        self.my_loot = int(loot)
-
-    def return_name(self):
-        return self.my_name
-
-    def return_health(self):
-        return self.my_health
-
-    def return_attack(self):
-        return self.my_attack
-
-    def return_dmg(self):
-        return self.my_dmg
-
-    def return_index(self):
-        return self.my_index
-
-    def return_loot(self):
-        return self.my_loot
-
-    def take_damage(self, dmg):
-        self.my_health -= dmg
-
-    def heal_damage(self, heal):
-        self.my_health += heal
-
 
 class Player_role:
     def __init__(self, name, health, attack):
@@ -75,48 +32,29 @@ class Game:
     def return_level(self):
         return self.glevel
 
+def serialise_objects(class_type, my_file):    
+    my_list=[]
+    with open(my_file) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(row)
+            my_list.append(class_type(*row))
+    return my_list
 
-class Inventory:
-    my_items = []
-
-    def __init__(self):
-        pass
-
-    def add_item(self, index, number):
-        i = 0
-        if self.my_items:
-            for item in self.my_items:
-                if item[0] == index:
-                    self.my_items[i][1] += number
-                else:
-                    self.my_items.append([index, number])
-        else:
-            self.my_items.append([index, number])
-
-    def remove_item(self, index, number):
-        i = 0
-        for item in self.my_items:
-            if item[0] == index:
-                self.my_items[i][1] -= number
-                if self.my_items[i][1] <= 0:
-                    del self.my_items[i]
-                    break
-
-    def show_items(self):
-        return self.my_items
-
+def serialise_list(my_file):    
+    my_list=[]
+    with open(my_file) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(row)
+            my_list.append(row)
+    return my_list
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
-weaponlist = [[0, "knife", 1], [1, "blunt short sword", 2]]
-itemslist = [[0, "Health Potion"], [1, "Nothing"]]
+weaponlist = serialise_list("weapons.csv")
+itemslist = serialise_list("items.csv")
 
-monsterlist = []
-with open("monsters.csv") as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    for row in csv_reader:
-        print(row)
-        monsterlist.append(Monster(*row))
+monsterlist = serialise_objects(monster.Monster,"monsters.csv")
 
 new_game = Game()
 new_game.setup()
@@ -124,7 +62,7 @@ seed(1)
 mindex = 0
 rindex = 0
 
-player_inv = Inventory()
+player_inv = inventory.Inventory()
 player_inv.add_item(0, 1)
 
 player_inv.add_item(0, 1)
