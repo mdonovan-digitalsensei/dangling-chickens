@@ -8,6 +8,7 @@ import inventory
 
 clear = lambda: os.system('clear')  #on Linux System
 
+
 class Player_role:
     def __init__(self, name, health, attack):
         pass
@@ -32,8 +33,9 @@ class Game:
     def return_level(self):
         return self.glevel
 
-def serialise_objects(class_type, my_file):    
-    my_list=[]
+
+def serialise_objects(class_type, my_file):
+    my_list = []
     with open(my_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
@@ -41,8 +43,9 @@ def serialise_objects(class_type, my_file):
             my_list.append(class_type(*row))
     return my_list
 
-def serialise_list(my_file):    
-    my_list=[]
+
+def serialise_list(my_file):
+    my_list = []
     with open(my_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
@@ -50,11 +53,12 @@ def serialise_list(my_file):
             my_list.append(row)
     return my_list
 
+
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
+
 weaponlist = serialise_list("weapons.csv")
 itemslist = serialise_list("items.csv")
-
-monsterlist = serialise_objects(monster.Monster,"monsters.csv")
+monsterlist = serialise_objects(monster.Monster, "monsters.csv")
 
 new_game = Game()
 new_game.setup()
@@ -72,12 +76,17 @@ player_inv.add_item(0, 1)
 print("Input your heroes name: ")
 player_name = input("name: ")
 
-nobody = player.Player(player_name, role[rindex][0], role[rindex][1], role[rindex][2],
-                role[rindex][3])
+nobody = player.Player(player_name, role[rindex][0], role[rindex][1],
+                       role[rindex][2], role[rindex][3])
+
+nobody.change_weapon(0,weaponlist)
 
 while True:
-    pwpn = weaponlist[nobody.return_weapon()][1]
-    pdmg = weaponlist[nobody.return_weapon()][2]
+    pwpn = nobody.return_weapon_name()
+    pdmg = nobody.return_weapon_dmg()
+    
+    #pwpn = weaponlist[nobody.return_weapo_idx()][1]
+    #pdmg = int(weaponlist[nobody.return_weapon_idx()][2])
 
     print(f"there are {len(monsterlist) - mindex} monsters left in list")
 

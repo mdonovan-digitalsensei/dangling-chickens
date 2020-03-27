@@ -6,7 +6,7 @@ class Monster:
     my_index = int
     my_loot = int
 
-    def __init__(self, name, health, attack, dmg, index, loot):
+    def __init__(self, index, name, health, attack, dmg, loot):
         self.my_name = name
         self.my_health = int(health)
         self.my_attack = int(attack)
