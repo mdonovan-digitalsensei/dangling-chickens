@@ -2,54 +2,12 @@ import os
 from random import seed
 from random import randint
 import csv
+import player
 
 clear = lambda: os.system('clear')  #on Linux System
 
 
-class Player:
-    my_name = str
-    my_role = str
-    my_plevel = int
-    my_health = int
-    my_attack = int
-    my_weapon = int
-    my_gold = int
 
-    def __init__(self, name, role, health, attack, weapon):
-        self.my_name = name
-        self.my_role = role
-        self.my_plevel = 0
-        self.my_health = health
-        self.my_attack = attack
-        self.my_weapon = weapon
-        self.my_gold = 0
-
-    def return_name(self):
-        return self.my_name
-
-    def return_role(self):
-        return self.my_role
-
-    def return_level(self):
-        return self.my_plevel
-
-    def return_health(self):
-        return self.my_health
-
-    def return_attack(self):
-        return self.my_attack
-
-    def return_weapon(self):
-        return self.my_weapon
-
-    def attack(self):
-        return randint(0, 6) + self.my_attack
-
-    def take_damage(self, dmg):
-        self.my_health -= dmg
-
-    def heal_damage(self, heal):
-        self.my_health += heal
 
 
 class Monster:
@@ -58,13 +16,15 @@ class Monster:
     my_attack = int
     my_dmg = int
     my_index = int
+    my_loot = int
 
-    def __init__(self, name, health, attack, dmg, index):
+    def __init__(self, name, health, attack, dmg, index, loot):
         self.my_name = name
         self.my_health = int(health)
         self.my_attack = int(attack)
         self.my_dmg = int(dmg)
         self.my_index = int(index)
+        self.my_loot = int(loot)
 
     def return_name(self):
         return self.my_name
@@ -80,6 +40,9 @@ class Monster:
 
     def return_index(self):
         return self.my_index
+
+    def return_loot(self):
+        return self.my_loot
 
     def take_damage(self, dmg):
         self.my_health -= dmg
@@ -171,7 +134,7 @@ player_inv.add_item(0, 1)
 print("Input your heroes name: ")
 player_name = input("name: ")
 
-nobody = Player(player_name, role[rindex][0], role[rindex][1], role[rindex][2],
+nobody = player.Player(player_name, role[rindex][0], role[rindex][1], role[rindex][2],
                 role[rindex][3])
 
 while True:
