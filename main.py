@@ -40,7 +40,6 @@ def serialise_objects(class_type, my_file):
     with open(my_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
-            print(row)
             my_list.append(class_type(*row))
     return my_list
 
@@ -49,8 +48,7 @@ def serialise_list(my_file):
     my_list = []
     with open(my_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        for row in csv_reader:
-            print(row)
+        for row in csv_reader:            
             my_list.append(row)
     return my_list
 
@@ -77,18 +75,13 @@ player_inv.add_item(0, 1)
 print("Input your heroes name: ")
 player_name = input("name: ")
 
-nobody = player.Player(player_name, role[rindex][0], role[rindex][1],
-                       role[rindex][2], role[rindex][3])
-
+nobody = player.Player(player_name, *role[rindex])
 nobody.change_weapon(0,weaponlist)
 
 while True:
     pwpn = nobody.return_weapon_name()
     pdmg = nobody.return_weapon_dmg()
     
-    #pwpn = weaponlist[nobody.return_weapo_idx()][1]
-    #pdmg = int(weaponlist[nobody.return_weapon_idx()][2])
-
     print(f"there are {len(monsterlist) - mindex} monsters left in list")
 
     if mindex >= len(monsterlist):
