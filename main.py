@@ -14,6 +14,15 @@ class Player_role:
     def __init__(self, name, health, attack):
         pass
 
+class Kill_list:
+    def __init__(self):
+        self.my_list = []
+
+    def add_kill(self, monster):
+        self.my_list.append(monster)
+
+    def return_list(self):
+        return self.my_list
 
 class Game:
     def __init__(self):
@@ -66,12 +75,14 @@ mindex = 0
 rindex = 0
 
 player_inv = inventory.Inventory()
+kill_list = Kill_list()
 
 print("Input your heroes name: ")
 player_name = input("name: ")
 
 nobody = player.Player(player_name, *role[rindex])
 nobody.change_weapon(0,weaponlist)
+
 
 while True:
     pwpn = nobody.return_weapon_name()
@@ -81,6 +92,9 @@ while True:
 
     if mindex >= len(monsterlist):
         print("No monsters left")
+        print("You Killed: ")
+        for kills in kill_list.return_list():
+            print(kills)        
         break
 
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
@@ -103,10 +117,12 @@ while True:
         print("End Game")
         break
     elif action == "i":
+        clear()
         print("*** Inventory ***")
         for item in player_inv.list_items():
             print(f"You have {item[1]} {itemslist[item[0]][1]}")
         print("*** Inventory ***")
+        print("---------------------")
 
     elif action == "a":
         clear()
@@ -121,6 +137,7 @@ while True:
             monsterlist[mindex].take_damage(pdmg)
             if monsterlist[mindex].return_alive() == False:
                 print(f"The {monsterlist[mindex].return_name()} has died")
+                kill_list.add_kill(monsterlist[mindex].return_name())
                 mindex += 1
         else:
             print(
@@ -130,7 +147,11 @@ while True:
             print(f"You have {nobody.return_health()} health remaining")
             if nobody.return_health() <= 0:
                 print(f"You have died")
+                print("You Killed: ")
+                for kills in kill_list.return_list():
+                    print(kills)
                 break
+        print("---------------------")
         new_game.increment_turn()
     else:
         clear()
