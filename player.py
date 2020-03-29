@@ -1,4 +1,3 @@
-from random import seed
 from random import randint
 
 
@@ -18,12 +17,13 @@ class Player:
         self.my_name = name
         self.my_role = role
         self.my_plevel = 0
-        self.my_health = health
-        self.my_attack = attack
-        self.my_weapon = weapon
+        self.my_health = int(health)
+        self.my_attack = int(attack)
+        self.my_weapon = int(weapon)
         self.my_gold = 0
         self.my_weapon_dmg = 0
-        self.my_weapon_name = str      
+        self.my_weapon_name = str 
+        self.my_max_health = int(health)
 
     def return_name(self):
         return self.my_name
@@ -49,6 +49,9 @@ class Player:
     def return_weapon_dmg(self):
         return self.my_weapon_dmg
 
+    def return_my_max_health(self):
+        return self.my_max_health
+
     def attack(self):
         return randint(0, 6) + self.my_attack
 
@@ -57,6 +60,9 @@ class Player:
 
     def heal_damage(self, heal):
         self.my_health += heal
+        if self.my_health > self.my_max_health:
+            self.my_health = self.my_max_health
+
 
     def change_weapon(self, index, li):
         self.my_weapon_idx = index

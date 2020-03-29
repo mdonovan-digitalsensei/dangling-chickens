@@ -13,6 +13,8 @@ class Monster:
         self.my_dmg = int(dmg)
         self.my_index = int(index)
         self.my_loot = int(loot)
+        self.my_max_health = int(health)
+        self.my_alive = True
 
     def return_name(self):
         return self.my_name
@@ -31,9 +33,14 @@ class Monster:
 
     def return_loot(self):
         return self.my_loot
+    
+    def return_alive(self):
+        return self.my_alive
 
     def take_damage(self, dmg):
         self.my_health -= dmg
+        if self.my_health <= 0:
+            self.my_alive = False
 
     def heal_damage(self, heal):
         self.my_health += heal

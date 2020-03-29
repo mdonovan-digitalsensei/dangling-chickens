@@ -66,11 +66,6 @@ mindex = 0
 rindex = 0
 
 player_inv = inventory.Inventory()
-player_inv.add_item(0, 1)
-
-player_inv.add_item(0, 1)
-
-player_inv.add_item(0, 1)
 
 print("Input your heroes name: ")
 player_name = input("name: ")
@@ -109,10 +104,8 @@ while True:
         break
     elif action == "i":
         print("*** Inventory ***")
-        for item in player_inv.show_items():
-            itemName = itemslist[item[0]][1]
-            itemNumber = item[1]
-            print(f"You have {itemNumber} {itemName}")
+        for item in player_inv.list_items():
+            print(f"You have {item[1]} {itemslist[item[0]][1]}")
         print("*** Inventory ***")
 
     elif action == "a":
@@ -126,7 +119,7 @@ while True:
         if attackroll > monsterattackroll:
             print(f"You have damanged the {monsterlist[mindex].return_name()}")
             monsterlist[mindex].take_damage(pdmg)
-            if monsterlist[mindex].return_health() <= 0:
+            if monsterlist[mindex].return_alive() == False:
                 print(f"The {monsterlist[mindex].return_name()} has died")
                 mindex += 1
         else:

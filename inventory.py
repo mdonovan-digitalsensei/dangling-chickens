@@ -24,5 +24,5 @@ class Inventory:
                     del self.my_items[i]
                     break
 
-    def show_items(self):
+    def list_items(self):
         return self.my_items
