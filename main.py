@@ -6,6 +6,7 @@ import csv
 import player
 import monster
 import inventory
+from killlist import Kill_list
 
 clear = lambda: os.system('clear')  #on Linux System
 
@@ -13,16 +14,6 @@ clear = lambda: os.system('clear')  #on Linux System
 class Player_role:
     def __init__(self, name, health, attack):
         pass
-
-class Kill_list:
-    def __init__(self):
-        self.my_list = []
-
-    def add_kill(self, monster):
-        self.my_list.append(monster)
-
-    def return_list(self):
-        return self.my_list
 
 class Game:
     def __init__(self):
