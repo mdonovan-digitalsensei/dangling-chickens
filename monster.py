@@ -1,3 +1,5 @@
+from random import randint
+
 class Monster:
     my_name = str
     my_health = int
@@ -6,7 +8,7 @@ class Monster:
     my_index = int
     my_loot = int
 
-    def __init__(self, index, name, health, attack, dmg, loot):
+    def __init__(self, index, name, health, attack, dmg, loot,lootchance):
         self.my_name = name
         self.my_health = int(health)
         self.my_attack = int(attack)
@@ -15,6 +17,7 @@ class Monster:
         self.my_loot = int(loot)
         self.my_max_health = int(health)
         self.my_alive = True
+        self.my_lootchance = int(lootchance)
 
     def return_name(self):
         return self.my_name
@@ -44,3 +47,7 @@ class Monster:
 
     def heal_damage(self, heal):
         self.my_health += heal
+
+    def loot_drop(self):
+        if randint(0,100) <= self.my_lootchance:
+            return [0,1]

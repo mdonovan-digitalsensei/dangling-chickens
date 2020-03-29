@@ -74,6 +74,7 @@ player_name = input("name: ")
 nobody = player.Player(player_name, *role[rindex])
 nobody.change_weapon(0,weaponlist)
 
+player_inv.add_item(0,1)
 
 while True:
     pwpn = nobody.return_weapon_name()
@@ -101,6 +102,9 @@ while True:
     print("Type q to quit any other to continue")
     print("Type q to quit")
     print("Type a to attack")
+    for item in player_inv.list_items():
+        if item[0] == 0:
+            print ("Type h to heal")
     print("Type i to view inventory")
     action = readchar.readchar()
 
@@ -114,6 +118,11 @@ while True:
             print(f"You have {item[1]} {itemslist[item[0]][1]}")
         print("*** Inventory ***")
         print("---------------------")
+    
+    elif action == "h":
+        nobody.heal_damage(5)
+        player_inv.remove_item(0,1)
+        print(f"You have healed, current health {nobody.return_health()} of {nobody.return_my_max_health()}")        
 
     elif action == "a":
         clear()
@@ -128,6 +137,9 @@ while True:
             monsterlist[mindex].take_damage(pdmg)
             if monsterlist[mindex].return_alive() == False:
                 print(f"The {monsterlist[mindex].return_name()} has died")
+                if monsterlist[mindex].loot_drop():
+                    temp_list = monsterlist[mindex].loot_drop()
+                    player_inv.add_item(*temp_list)
                 kill_list.add_kill(monsterlist[mindex].return_name())
                 mindex += 1
         else:
