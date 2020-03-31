@@ -43,7 +43,6 @@ def serialise_objects(class_type, my_file):
             my_list.append(class_type(*row))
     return my_list
 
-
 def serialise_list(my_file):
     my_list = []
     with open(my_file) as csv_file:
@@ -52,18 +51,32 @@ def serialise_list(my_file):
             my_list.append(row)
     return my_list
 
+def create_dungeon_floor_monster_list(monsters):
+    my_list = []
+    for i in monsters:        
+        if i != ' ':            
+            with open("monsters.csv") as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:                    
+                    if row[0][0] == i:
+                        my_list.append(monster.Monster(*row))
+    return my_list
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
 
 weaponlist = serialise_list("weapons.csv")
 itemslist = serialise_list("items.csv")
-monsterlist = serialise_objects(monster.Monster, "monsters.csv")
+#monsterlist = serialise_objects(monster.Monster, "monsters.csv")
+dungeon_floor_list = serialise_list("dungeonlevel.csv")
+dungeon_floor_level = 0
 
 new_game = Game()
 new_game.setup()
 seed(1)
 mindex = 0
 rindex = 0
+dungeon_floor_cleared = True
+dungeon_floor_monsters = []
 
 player_inv = inventory.Inventory()
 kill_list = Kill_list()
@@ -79,16 +92,24 @@ player_inv.add_item(0,1)
 while True:
     pwpn = nobody.return_weapon_name()
     pdmg = nobody.return_weapon_dmg()
+
+    print(f"there are {len(dungeon_floor_monsters) - mindex} monsters left in list on floor")
     
-    print(f"there are {len(monsterlist) - mindex} monsters left in list")
-
-    if mindex >= len(monsterlist):
-        print("No monsters left")
-        print("You Killed: ")
-        for kills in kill_list.return_list():
-            print(kills)        
-        break
-
+    if mindex >= len(dungeon_floor_monsters):       
+        if dungeon_floor_level < (len(dungeon_floor_list) - 1):
+            dungeon_floor_level += 1
+            dungeon_floor_monsters = []
+            dungeon_floor_monsters = create_dungeon_floor_monster_list(list(dungeon_floor_list[dungeon_floor_level][3]))    
+            mindex=0
+        elif dungeon_floor_level == (len(dungeon_floor_list) - 1):
+            print("no I am here")
+            print("All cleared")
+            print("No monsters left")
+            print("You Killed: ")
+            for kills in kill_list.return_list():
+                print(kills)        
+            break          
+            
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
     print(f"Current Health: {nobody.return_health()}")
     print(f"Current Attack: {nobody.return_attack()}")
@@ -97,7 +118,7 @@ while True:
         f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
     )
 
-    print(f"You are facing a {monsterlist[mindex].return_name()}")
+    print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
 
     print("Type q to quit any other to continue")
     print("Type q to quit")
@@ -128,25 +149,25 @@ while True:
         clear()
         attackroll = nobody.attack()
         print(f"You perform an attack scoring a {attackroll}")
-        monsterattackroll = randint(0, 6) + monsterlist[mindex].return_attack()
+        monsterattackroll = randint(0, 6) + dungeon_floor_monsters[mindex].return_attack()
         print(
-            f"The {monsterlist[mindex].return_name()} gets an attack roll of {monsterattackroll}"
+            f"The {dungeon_floor_monsters[mindex].return_name()} gets an attack roll of {monsterattackroll}"
         )
         if attackroll > monsterattackroll:
-            print(f"You have damanged the {monsterlist[mindex].return_name()}")
-            monsterlist[mindex].take_damage(pdmg)
-            if monsterlist[mindex].return_alive() == False:
-                print(f"The {monsterlist[mindex].return_name()} has died")
-                if monsterlist[mindex].loot_drop():
-                    temp_list = monsterlist[mindex].loot_drop()
+            print(f"You have damanged the {dungeon_floor_monsters[mindex].return_name()}")
+            dungeon_floor_monsters[mindex].take_damage(pdmg)
+            if dungeon_floor_monsters[mindex].return_alive() == False:
+                print(f"The {dungeon_floor_monsters[mindex].return_name()} has died")
+                if dungeon_floor_monsters[mindex].loot_drop():
+                    temp_list = dungeon_floor_monsters[mindex].loot_drop()
                     player_inv.add_item(*temp_list)
-                kill_list.add_kill(monsterlist[mindex].return_name())
+                kill_list.add_kill(dungeon_floor_monsters[mindex].return_name())
                 mindex += 1
         else:
             print(
-                f"The {monsterlist[mindex].return_name()} has damaged you! You have taken {monsterlist[mindex].return_dmg()}"
+                f"The {dungeon_floor_monsters[mindex].return_name()} has damaged you! You have taken {dungeon_floor_monsters[mindex].return_dmg()}"
             )
-            nobody.take_damage(monsterlist[mindex].return_dmg())
+            nobody.take_damage(dungeon_floor_monsters[mindex].return_dmg())
             print(f"You have {nobody.return_health()} health remaining")
             if nobody.return_health() <= 0:
                 print(f"You have died")
