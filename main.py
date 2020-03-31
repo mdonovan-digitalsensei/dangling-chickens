@@ -111,6 +111,8 @@ while True:
             break          
             
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
+    print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
+    print(dungeon_floor_list[dungeon_floor_level][2])
     print(f"Current Health: {nobody.return_health()}")
     print(f"Current Attack: {nobody.return_attack()}")
     print(f"Current Weapon: {pwpn}")
