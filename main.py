@@ -34,7 +34,6 @@ class Game:
     def return_level(self):
         return self.glevel
 
-
 def serialise_objects(class_type, my_file):
     my_list = []
     with open(my_file) as csv_file:
@@ -62,6 +61,20 @@ def create_dungeon_floor_monster_list(monsters):
                         my_list.append(monster.Monster(*row))
     return my_list
 
+def print_map(my_level,x,y,player_char):
+    my_map_file = "./maps/map_" + my_level + ".map"
+    lx = x
+    ly = y
+    i = 0
+    with open(my_map_file) as map:  
+        for row in map:            
+            i += +1   
+            if i == ly:
+                row = list(row)          
+                row[lx] = player_char                  
+                row = "".join(row)
+            print(f"{row}", end='')               
+
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
 
 weaponlist = serialise_list("weapons.csv")
@@ -84,7 +97,7 @@ kill_list = Kill_list()
 print("Input your heroes name: ")
 player_name = input("name: ")
 
-nobody = player.Player(player_name, *role[rindex])
+nobody = player.Player(player_name, *role[rindex], 5, 5)
 nobody.change_weapon(0,weaponlist)
 
 player_inv.add_item(0,1)
@@ -101,8 +114,7 @@ while True:
             dungeon_floor_monsters = []
             dungeon_floor_monsters = create_dungeon_floor_monster_list(list(dungeon_floor_list[dungeon_floor_level][3]))    
             mindex=0
-        elif dungeon_floor_level == (len(dungeon_floor_list) - 1):
-            print("no I am here")
+        elif dungeon_floor_level == (len(dungeon_floor_list) - 1):            
             print("All cleared")
             print("No monsters left")
             print("You Killed: ")
@@ -119,6 +131,8 @@ while True:
     print(
         f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
     )
+
+    print_map("01",nobody.return_x(),nobody.return_y(), nobody.return_char())
 
     print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
 

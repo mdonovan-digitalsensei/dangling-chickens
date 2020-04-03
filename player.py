@@ -13,7 +13,7 @@ class Player:
     my_weapon_name = str
     my_weapon_idx = int
 
-    def __init__(self, name, role, health, attack, weapon):
+    def __init__(self, name, role, health, attack, weapon, x, y):
         self.my_name = name
         self.my_role = role
         self.my_plevel = 0
@@ -24,6 +24,9 @@ class Player:
         self.my_weapon_dmg = 0
         self.my_weapon_name = str 
         self.my_max_health = int(health)
+        self.my_icon = "@"
+        self.y = x
+        self.x = y
 
     def return_name(self):
         return self.my_name
@@ -51,6 +54,15 @@ class Player:
 
     def return_my_max_health(self):
         return self.my_max_health
+
+    def return_x(self):
+        return self.x
+
+    def return_y(self):
+        return self.y
+
+    def return_char(self):
+        return self.my_icon
 
     def attack(self):
         return randint(0, 6) + self.my_attack
