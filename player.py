@@ -80,4 +80,7 @@ class Player:
         self.my_weapon_idx = index
         self.my_weapon_name = li[self.return_weapon_idx()][1]
         self.my_weapon_dmg = int(li[self.return_weapon_idx()][2])
-        
+
+    def move(self,x,y):
+        self.x += x
+        self.y += y

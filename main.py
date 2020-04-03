@@ -97,7 +97,7 @@ kill_list = Kill_list()
 print("Input your heroes name: ")
 player_name = input("name: ")
 
-nobody = player.Player(player_name, *role[rindex], 5, 5)
+nobody = player.Player(player_name, *role[rindex], 2, 8)
 nobody.change_weapon(0,weaponlist)
 
 player_inv.add_item(0,1)
@@ -144,7 +144,7 @@ while True:
             print ("Type h to heal")
     print("Type i to view inventory")
     action = readchar.readchar()
-
+    
     if action == "q":
         print("End Game")
         break
@@ -160,6 +160,35 @@ while True:
         nobody.heal_damage(5)
         player_inv.remove_item(0,1)
         print(f"You have healed, current health {nobody.return_health()} of {nobody.return_my_max_health()}")        
+
+    elif action == "A":
+        clear()
+        dy = -1
+        dx = 0
+        nobody.move(dx,dy)
+        print("UP")
+        
+    elif action == "B":
+        clear()
+        dy = 1
+        dx = 0
+        nobody.move(dx,dy)
+        print("DOWN")
+        
+    elif action == "C":
+        clear()
+        dy = 0
+        dx = 1
+        nobody.move(dx,dy)
+        print("RIGHT")
+        
+    elif action == "D":
+        clear()
+        dy = 0
+        dx = -1
+        nobody.move(dx,dy)
+        print("LEFT")
+        
 
     elif action == "a":
         clear()
@@ -195,4 +224,4 @@ while True:
         new_game.increment_turn()
     else:
         clear()
-        print("Unkown Action")
+        print(f"{action} Unkown Action")
