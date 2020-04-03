@@ -82,5 +82,9 @@ class Player:
         self.my_weapon_dmg = int(li[self.return_weapon_idx()][2])
 
     def move(self,x,y):
-        self.x += x
-        self.y += y
+        test_x = self.x + x
+        test_y = self.y + y
+        if test_x > 0 and test_x < 9:
+            self.x += x
+        if test_y > 1 and test_y < 10:            
+            self.y += y            

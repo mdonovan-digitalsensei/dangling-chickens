@@ -65,10 +65,11 @@ def print_map(my_level,x,y,player_char):
     my_map_file = "./maps/map_" + my_level + ".map"
     lx = x
     ly = y
-    i = 0
+    i = 0    
+    print()
     with open(my_map_file) as map:  
         for row in map:            
-            i += +1   
+            i += 1   
             if i == ly:
                 row = list(row)          
                 row[lx] = player_char                  
