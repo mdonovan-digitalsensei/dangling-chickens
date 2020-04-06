@@ -7,6 +7,7 @@ import player
 import monster
 import inventory
 from killlist import Kill_list
+from generate_map import print_map, generate_map_array
 
 clear = lambda: os.system('clear')  #on Linux System
 
@@ -60,21 +61,8 @@ def create_dungeon_floor_monster_list(monsters):
                     if row[0][0] == i:
                         my_list.append(monster.Monster(*row))
     return my_list
+              
 
-def print_map(my_level,x,y,player_char):
-    my_map_file = "./maps/map_" + my_level + ".map"
-    lx = x
-    ly = y
-    i = 0    
-    print()
-    with open(my_map_file) as map:  
-        for row in map:            
-            i += 1   
-            if i == ly:
-                row = list(row)          
-                row[lx] = player_char                  
-                row = "".join(row)
-            print(f"{row}", end='')               
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
 

@@ -84,7 +84,7 @@ class Player:
     def move(self,x,y):
         test_x = self.x + x
         test_y = self.y + y
-        if test_x > 0 and test_x < 9:
+        if test_x > 0 and test_x < 19:
             self.x += x
-        if test_y > 1 and test_y < 10:            
-            self.y += y            
+        if test_y > 1 and test_y < 20:
+            self.y += y
