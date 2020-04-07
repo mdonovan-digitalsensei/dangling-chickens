@@ -7,7 +7,8 @@ import player
 import monster
 import inventory
 from killlist import Kill_list
-from generate_map import print_map, generate_map_array
+from generate_map import Dungeon_map
+from entities import Entity_List
 
 clear = lambda: os.system('clear')  #on Linux System
 
@@ -63,6 +64,12 @@ def create_dungeon_floor_monster_list(monsters):
     return my_list
               
 
+dungeon_map=Dungeon_map()
+dungeon_map.generate_map_array("01")
+
+entities = Entity_List()
+
+
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
 
@@ -110,7 +117,15 @@ while True:
             for kills in kill_list.return_list():
                 print(kills)        
             break          
-            
+
+    entities.add(2,2,"M",dungeon_floor_monsters[0])
+    entities.add(3,3,"M",dungeon_floor_monsters[1])
+    
+    print(entities.return_list())
+    print(dungeon_floor_monsters[0])
+    removed_entity = entities.remove(dungeon_floor_monsters[0])
+    print(f"removed  {removed_entity[3].return_name()}")
+
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
     print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
     print(dungeon_floor_list[dungeon_floor_level][2])
@@ -121,7 +136,7 @@ while True:
         f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
     )
 
-    print_map("01",nobody.return_x(),nobody.return_y(), nobody.return_char())
+    dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char())
 
     print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
 
