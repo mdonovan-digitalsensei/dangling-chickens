@@ -17,10 +17,17 @@ class Dungeon_map:
         i = 0    
         print()
         for row in self.map_array:
-            i += 1   
+            i += 1
+            for e in entity_list:
+                ex = e[0]
+                ey = e[1]
+                echar = e[2]
+                if i == ey:
+                    row = list(row)
+                    row[ex] = echar
             if i == ly:
-                row = list(row)          
-                row[lx] = player_char                                  
+                row = list(row)
+                row[lx] = player_char
             row = "".join(row)
             print(f"{row}", end='')   
         print("\n")

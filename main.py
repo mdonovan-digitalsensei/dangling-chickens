@@ -98,10 +98,12 @@ nobody.change_weapon(0,weaponlist)
 
 player_inv.add_item(0,1)
 
+
+
 while True:
     pwpn = nobody.return_weapon_name()
     pdmg = nobody.return_weapon_dmg()
-
+   
     print(f"there are {len(dungeon_floor_monsters) - mindex} monsters left in list on floor")
     
     if mindex >= len(dungeon_floor_monsters):       
@@ -109,6 +111,8 @@ while True:
             dungeon_floor_level += 1
             dungeon_floor_monsters = []
             dungeon_floor_monsters = create_dungeon_floor_monster_list(list(dungeon_floor_list[dungeon_floor_level][3]))    
+            entities.add(2,2,"M",dungeon_floor_monsters[0])
+            entities.add(3,3,"M",dungeon_floor_monsters[1])
             mindex=0
         elif dungeon_floor_level == (len(dungeon_floor_list) - 1):            
             print("All cleared")
@@ -118,13 +122,10 @@ while True:
                 print(kills)        
             break          
 
-    entities.add(2,2,"M",dungeon_floor_monsters[0])
-    entities.add(3,3,"M",dungeon_floor_monsters[1])
+
     
     print(entities.return_list())
-    print(dungeon_floor_monsters[0])
-    removed_entity = entities.remove(dungeon_floor_monsters[0])
-    print(f"removed  {removed_entity[3].return_name()}")
+    print(dungeon_floor_monsters[0])    
 
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
     print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
@@ -136,7 +137,7 @@ while True:
         f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
     )
 
-    dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char())
+    dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char(),entities.return_list())
 
     print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
 
@@ -169,28 +170,28 @@ while True:
         clear()
         dy = -1
         dx = 0
-        nobody.move(dx,dy)
+        nobody.move(dx,dy,entities.return_list())
         print("UP")
         
     elif action == "B":
         clear()
         dy = 1
         dx = 0
-        nobody.move(dx,dy)
+        nobody.move(dx,dy,entities.return_list())
         print("DOWN")
         
     elif action == "C":
         clear()
         dy = 0
         dx = 1
-        nobody.move(dx,dy)
+        nobody.move(dx,dy,entities.return_list())
         print("RIGHT")
         
     elif action == "D":
         clear()
         dy = 0
         dx = -1
-        nobody.move(dx,dy)
+        nobody.move(dx,dy,entities.return_list())
         print("LEFT")
         
 

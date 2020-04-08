@@ -81,10 +81,20 @@ class Player:
         self.my_weapon_name = li[self.return_weapon_idx()][1]
         self.my_weapon_dmg = int(li[self.return_weapon_idx()][2])
 
-    def move(self,x,y):
+    def move(self,x,y,entities):
         test_x = self.x + x
         test_y = self.y + y
+        for entity in entities:
+            if entity[0] == test_x and entity[1] == test_y:
+                print(entity[0])
+                print(entity[1])
+                return True
+
         if test_x > 0 and test_x < 19:
             self.x += x
+            
         if test_y > 1 and test_y < 20:
             self.y += y
+            
+        
+            
