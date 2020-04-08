@@ -2,6 +2,10 @@ from colourtext import colours
 
 
 class Dungeon_map:
+
+    def __init__(self):
+        self.map_array = []
+
     def generate_map_array(self,my_level):
         my_map_file = "./maps/map_" + my_level + ".map"
         self.map_array = []
@@ -31,4 +35,7 @@ class Dungeon_map:
             row = "".join(row)
             print(f"{row}", end='')   
         print("\n")
+
+    def return_map_array(self):
+        return self.map_array
 # 

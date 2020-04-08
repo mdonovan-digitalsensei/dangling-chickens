@@ -65,7 +65,7 @@ def create_dungeon_floor_monster_list(monsters):
               
 
 dungeon_map=Dungeon_map()
-dungeon_map.generate_map_array("01")
+dungeon_map.generate_map_array("02")
 
 entities = Entity_List()
 
@@ -121,8 +121,7 @@ while True:
             for kills in kill_list.return_list():
                 print(kills)        
             break          
-
-
+    
     
     print(entities.return_list())
     print(dungeon_floor_monsters[0])    
@@ -170,28 +169,28 @@ while True:
         clear()
         dy = -1
         dx = 0
-        nobody.move(dx,dy,entities.return_list())
+        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
         print("UP")
         
     elif action == "B":
         clear()
         dy = 1
         dx = 0
-        nobody.move(dx,dy,entities.return_list())
+        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
         print("DOWN")
         
     elif action == "C":
         clear()
         dy = 0
         dx = 1
-        nobody.move(dx,dy,entities.return_list())
+        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
         print("RIGHT")
         
     elif action == "D":
         clear()
         dy = 0
         dx = -1
-        nobody.move(dx,dy,entities.return_list())
+        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
         print("LEFT")
         
 
