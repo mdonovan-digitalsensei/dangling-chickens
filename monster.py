@@ -8,7 +8,7 @@ class Monster:
     my_index = int
     my_loot = int
 
-    def __init__(self, index, name, health, attack, dmg, loot,lootchance):
+    def __init__(self, index, name, health, attack, dmg, loot,lootchance, mchar):
         self.my_name = name
         self.my_health = int(health)
         self.my_attack = int(attack)
@@ -18,6 +18,9 @@ class Monster:
         self.my_max_health = int(health)
         self.my_alive = True
         self.my_lootchance = int(lootchance)
+        self.x = 0
+        self.y = 0
+        self.mchar = str(mchar)
 
     def return_name(self):
         return self.my_name
@@ -51,3 +54,19 @@ class Monster:
     def loot_drop(self):
         if randint(0,100) <= self.my_lootchance:
             return [0,1]
+
+    def return_mchar(self):
+        return self.mchar
+
+    def return_x(self):
+        return self.x
+    
+    def return_y(self):
+        return self.y
+
+    def set_x(self, x):
+        self.x = int(x)
+
+    def set_y(self, y):
+        self.y = int(y)
+        

@@ -12,6 +12,7 @@ class Player:
     my_weapon_dmg = int
     my_weapon_name = str
     my_weapon_idx = int
+    is_engaged = False
 
     def __init__(self, name, role, health, attack, weapon, x, y):
         self.my_name = name
@@ -86,7 +87,7 @@ class Player:
         test_y = self.y + y
         for entity in entities:
             if entity[0] == test_x and entity[1] == test_y:
-                return True        
+                return entity[3]       
         if map_array[test_y - 1][test_x] == "x":
             return True
 

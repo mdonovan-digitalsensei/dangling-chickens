@@ -52,17 +52,24 @@ def serialise_list(my_file):
             my_list.append(row)
     return my_list
 
-def create_dungeon_floor_monster_list(monsters):
+def create_dungeon_floor_monster_list(monsters, entity):
     my_list = []
-    for i in monsters:        
-        if i != ' ':            
-            with open("monsters.csv") as csv_file:
-                csv_reader = csv.reader(csv_file, delimiter=',')
-                for row in csv_reader:                    
-                    if row[0][0] == i:
-                        my_list.append(monster.Monster(*row))
+    temp_list=monsters.split(" ")
+    monster_list=[]
+    for m in temp_list:
+        monster_list.append(m.split(","))
+    
+    for i in range(len(monster_list)):                    
+        with open("monsters.csv") as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            for row in csv_reader:                    
+                if row[0][0] == monster_list[i][0]:
+                    my_list.append(monster.Monster(*row))
+                    my_list[-1].set_x(monster_list[i][1])
+                    my_list[-1].set_y(monster_list[i][2])
+                    entity.add(my_list[-1].return_x(),my_list[-1].return_y(),my_list[-1].return_mchar(),my_list[-1])
     return my_list
-              
+
 
 dungeon_map=Dungeon_map()
 dungeon_map.generate_map_array("02")
@@ -110,9 +117,9 @@ while True:
         if dungeon_floor_level < (len(dungeon_floor_list) - 1):
             dungeon_floor_level += 1
             dungeon_floor_monsters = []
-            dungeon_floor_monsters = create_dungeon_floor_monster_list(list(dungeon_floor_list[dungeon_floor_level][3]))    
-            entities.add(2,2,"M",dungeon_floor_monsters[0])
-            entities.add(3,3,"M",dungeon_floor_monsters[1])
+            print(dungeon_floor_list[dungeon_floor_level][3])
+            dungeon_floor_monsters = create_dungeon_floor_monster_list(dungeon_floor_list[dungeon_floor_level][3],entities)    
+            
             mindex=0
         elif dungeon_floor_level == (len(dungeon_floor_list) - 1):            
             print("All cleared")
