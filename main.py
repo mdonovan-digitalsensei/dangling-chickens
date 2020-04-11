@@ -96,15 +96,14 @@ weaponlist = serialise_list("data/weapons.csv")
 itemslist = serialise_list("data/items.csv")
 #monsterlist = serialise_objects(monster.Monster, "monsters.csv")
 dungeon_floor_list = serialise_list("data/dungeonlevel.csv")
-dungeon_floor_level = 0
+dungeon_floor_level = 1
 
 new_game = Game()
 new_game.setup()
 seed(1)
-mindex = 0
 rindex = 0
-dungeon_floor_cleared = True
-dungeon_floor_monsters = []
+dungeon_floor_cleared = False
+
 
 player_inv = inventory.Inventory()
 kill_list = Kill_list()
@@ -117,6 +116,8 @@ nobody.change_weapon(0,weaponlist)
 
 player_inv.add_item(0,1)
 
+new_floor_load = True
+use_stairs_up = False
 
 
 while True:
@@ -125,14 +126,16 @@ while True:
    
     # this used to change the level when we were using the end of the monster list to generate things, most of this is probably unecessary now
 
-    if mindex >= len(dungeon_floor_monsters):       
+    if new_floor_load == True:
+        create_dungeon_floor_monster_list(dungeon_floor_list[dungeon_floor_level][3],entities)
+        new_floor_load = False
+
+    if use_stairs_up == True:
         if dungeon_floor_level < (len(dungeon_floor_list) - 1):
             dungeon_floor_level += 1
-            dungeon_floor_monsters = []
-            print(dungeon_floor_list[dungeon_floor_level][3])
-            dungeon_floor_monsters = create_dungeon_floor_monster_list(dungeon_floor_list[dungeon_floor_level][3],entities)    
-            
-            mindex=0
+            new_floor_load = True
+            print(dungeon_floor_list[dungeon_floor_level][3])                
+                        
         elif dungeon_floor_level == (len(dungeon_floor_list) - 1):            
             print("All cleared")
             print("No monsters left")
@@ -140,7 +143,7 @@ while True:
             for kills in kill_list.return_list():
                 print(kills)        
             break              
-    
+        
     is_in_combat, combat_with_monster = in_combat(nobody.return_x(), nobody.return_y(), entities.return_list())
         
     # if is_in_combat == True we should lock the player in place and present a diffrent interface
@@ -195,7 +198,7 @@ while True:
                         player_inv.add_item(*temp_list)
                     kill_list.add_kill(combat_with_monster.return_name())
                     entities.remove(combat_with_monster)
-                    mindex += 1
+                    
             else:
                 print(
                     f"The {combat_with_monster.return_name()} has damaged you! You have taken {combat_with_monster.return_dmg()}"
