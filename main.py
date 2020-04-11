@@ -13,6 +13,7 @@ from in_combat import in_combat
 
 clear = lambda: os.system('clear')  #on Linux System
 
+FLOOR_LEVELS = ("00","01","02","03","04","05")
 
 class Player_role:
     def __init__(self, name, health, attack):
@@ -71,6 +72,16 @@ def create_dungeon_floor_monster_list(monsters, entity):
                     entity.add(my_list[-1].return_x(),my_list[-1].return_y(),my_list[-1].return_mchar(),my_list[-1])
     return my_list
 
+def bio():
+    print(f"{nobody.return_name()} you are a {nobody.return_role()}")
+    print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
+    print(dungeon_floor_list[dungeon_floor_level][2])
+    print(f"Current Health: {nobody.return_health()}")
+    print(f"Current Attack: {nobody.return_attack()}")
+    print(f"Current Weapon: {pwpn}")
+    print(
+        f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
+    )
 
 dungeon_map=Dungeon_map()
 dungeon_map.generate_map_array("02")
@@ -112,8 +123,8 @@ while True:
     pwpn = nobody.return_weapon_name()
     pdmg = nobody.return_weapon_dmg()
    
-    print(f"there are {len(dungeon_floor_monsters) - mindex} monsters left in list on floor")
-    
+    # this used to change the level when we were using the end of the monster list to generate things, most of this is probably unecessary now
+
     if mindex >= len(dungeon_floor_monsters):       
         if dungeon_floor_level < (len(dungeon_floor_list) - 1):
             dungeon_floor_level += 1
@@ -130,30 +141,14 @@ while True:
                 print(kills)        
             break              
     
-
-    print(f"{nobody.return_name()} you are a {nobody.return_role()}")
-    print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
-    print(dungeon_floor_list[dungeon_floor_level][2])
-    print(f"Current Health: {nobody.return_health()}")
-    print(f"Current Attack: {nobody.return_attack()}")
-    print(f"Current Weapon: {pwpn}")
-    print(
-        f"Current Game Turn {new_game.return_turn()} you are on level {new_game.return_level()}"
-    )
-
-    dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char(),entities.return_list())
-
     is_in_combat, combat_with_monster = in_combat(nobody.return_x(), nobody.return_y(), entities.return_list())
-    
-
-    print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
-
-
-
+        
     # if is_in_combat == True we should lock the player in place and present a diffrent interface
 
     if is_in_combat == True:
         
+        bio()
+        print("------------------------------------")
         print("Stuck in combat")
         print(f"In combat with {combat_with_monster.return_name()}")
         print("Type q to quit")
@@ -216,9 +211,12 @@ while True:
             print("---------------------")
             new_game.increment_turn()
             
-    else:        
-        print("Type q to quit")
-        print("Type a to attack")
+    else:
+        bio()        
+        print("------------------------------------")
+        dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char(),entities.return_list())
+        print("------------------------------------")
+        print("Type q to quit")        
         for item in player_inv.list_items():
             if item[0] == 0:
                 print ("Type h to heal")
