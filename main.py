@@ -9,6 +9,7 @@ import inventory
 from killlist import Kill_list
 from generate_map import Dungeon_map
 from entities import Entity_List
+from in_combat import in_combat
 
 clear = lambda: os.system('clear')  #on Linux System
 
@@ -60,7 +61,7 @@ def create_dungeon_floor_monster_list(monsters, entity):
         monster_list.append(m.split(","))
     
     for i in range(len(monster_list)):                    
-        with open("monsters.csv") as csv_file:
+        with open("data/monsters.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             for row in csv_reader:                    
                 if row[0][0] == monster_list[i][0]:
@@ -80,10 +81,10 @@ entities = Entity_List()
 
 role = [["cadet", 5, 3, 0], ["recruit", 10, 2, 0]]
 
-weaponlist = serialise_list("weapons.csv")
-itemslist = serialise_list("items.csv")
+weaponlist = serialise_list("data/weapons.csv")
+itemslist = serialise_list("data/items.csv")
 #monsterlist = serialise_objects(monster.Monster, "monsters.csv")
-dungeon_floor_list = serialise_list("dungeonlevel.csv")
+dungeon_floor_list = serialise_list("data/dungeonlevel.csv")
 dungeon_floor_level = 0
 
 new_game = Game()
@@ -127,11 +128,8 @@ while True:
             print("You Killed: ")
             for kills in kill_list.return_list():
                 print(kills)        
-            break          
+            break              
     
-    
-    print(entities.return_list())
-    print(dungeon_floor_monsters[0])    
 
     print(f"{nobody.return_name()} you are a {nobody.return_role()}")
     print(f"You are on level {dungeon_floor_level} in the {dungeon_floor_list[dungeon_floor_level][1]}")
@@ -145,94 +143,104 @@ while True:
 
     dungeon_map.print_map(nobody.return_x(),nobody.return_y(), nobody.return_char(),entities.return_list())
 
+    is_in_combat = in_combat(nobody.return_x(), nobody.return_y(), entities.return_list())
+
     print(f"You are facing a {dungeon_floor_monsters[mindex].return_name()}")
 
-    print("Type q to quit any other to continue")
-    print("Type q to quit")
-    print("Type a to attack")
-    for item in player_inv.list_items():
-        if item[0] == 0:
-            print ("Type h to heal")
-    print("Type i to view inventory")
-    action = readchar.readchar()
-    
-    if action == "q":
-        print("End Game")
-        break
-    elif action == "i":
-        clear()
-        print("*** Inventory ***")
-        for item in player_inv.list_items():
-            print(f"You have {item[1]} {itemslist[item[0]][1]}")
-        print("*** Inventory ***")
-        print("---------------------")
-    
-    elif action == "h":
-        nobody.heal_damage(5)
-        player_inv.remove_item(0,1)
-        print(f"You have healed, current health {nobody.return_health()} of {nobody.return_my_max_health()}")        
 
-    elif action == "A":
-        clear()
-        dy = -1
-        dx = 0
-        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
-        print("UP")
-        
-    elif action == "B":
-        clear()
-        dy = 1
-        dx = 0
-        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
-        print("DOWN")
-        
-    elif action == "C":
-        clear()
-        dy = 0
-        dx = 1
-        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
-        print("RIGHT")
-        
-    elif action == "D":
-        clear()
-        dy = 0
-        dx = -1
-        nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
-        print("LEFT")
-        
 
-    elif action == "a":
+    # if is_in_combat == True we should lock the player in place and present a diffrent interface
+
+    if is_in_combat == True:
         clear()
-        attackroll = nobody.attack()
-        print(f"You perform an attack scoring a {attackroll}")
-        monsterattackroll = randint(0, 6) + dungeon_floor_monsters[mindex].return_attack()
-        print(
-            f"The {dungeon_floor_monsters[mindex].return_name()} gets an attack roll of {monsterattackroll}"
-        )
-        if attackroll > monsterattackroll:
-            print(f"You have damanged the {dungeon_floor_monsters[mindex].return_name()}")
-            dungeon_floor_monsters[mindex].take_damage(pdmg)
-            if dungeon_floor_monsters[mindex].return_alive() == False:
-                print(f"The {dungeon_floor_monsters[mindex].return_name()} has died")
-                if dungeon_floor_monsters[mindex].loot_drop():
-                    temp_list = dungeon_floor_monsters[mindex].loot_drop()
-                    player_inv.add_item(*temp_list)
-                kill_list.add_kill(dungeon_floor_monsters[mindex].return_name())
-                mindex += 1
-        else:
-            print(
-                f"The {dungeon_floor_monsters[mindex].return_name()} has damaged you! You have taken {dungeon_floor_monsters[mindex].return_dmg()}"
-            )
-            nobody.take_damage(dungeon_floor_monsters[mindex].return_dmg())
-            print(f"You have {nobody.return_health()} health remaining")
-            if nobody.return_health() <= 0:
-                print(f"You have died")
-                print("You Killed: ")
-                for kills in kill_list.return_list():
-                    print(kills)
-                break
-        print("---------------------")
-        new_game.increment_turn()
+        print("Stuck in combat")
+        action = readchar.readchar()
+        if action == "q":
+            print("End Game")
+            break
+            
     else:
-        clear()
-        print(f"{action} Unkown Action")
+        print("Type q to quit any other to continue")
+        print("Type q to quit")
+        print("Type a to attack")
+        for item in player_inv.list_items():
+            if item[0] == 0:
+                print ("Type h to heal")
+        print("Type i to view inventory")
+        action = readchar.readchar()
+        
+        if action == "q":
+            print("End Game")
+            break
+        elif action == "i":
+            clear()
+            print("*** Inventory ***")
+            for item in player_inv.list_items():
+                print(f"You have {item[1]} {itemslist[item[0]][1]}")
+            print("*** Inventory ***")
+            print("---------------------")
+        
+        elif action == "h":
+            nobody.heal_damage(5)
+            player_inv.remove_item(0,1)
+            print(f"You have healed, current health {nobody.return_health()} of {nobody.return_my_max_health()}")        
+
+        elif action == "A":
+            clear()
+            dy = -1
+            dx = 0
+            nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
+            
+        elif action == "B":
+            clear()
+            dy = 1
+            dx = 0
+            nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
+            
+        elif action == "C":
+            clear()
+            dy = 0
+            dx = 1
+            nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())
+            
+        elif action == "D":
+            clear()
+            dy = 0
+            dx = -1
+            nobody.move(dx,dy,entities.return_list(),dungeon_map.return_map_array())        
+            
+        elif action == "a":
+            clear()
+            attackroll = nobody.attack()
+            print(f"You perform an attack scoring a {attackroll}")
+            monsterattackroll = randint(0, 6) + dungeon_floor_monsters[mindex].return_attack()
+            print(
+                f"The {dungeon_floor_monsters[mindex].return_name()} gets an attack roll of {monsterattackroll}"
+            )
+            if attackroll > monsterattackroll:
+                print(f"You have damanged the {dungeon_floor_monsters[mindex].return_name()}")
+                dungeon_floor_monsters[mindex].take_damage(pdmg)
+                if dungeon_floor_monsters[mindex].return_alive() == False:
+                    print(f"The {dungeon_floor_monsters[mindex].return_name()} has died")
+                    if dungeon_floor_monsters[mindex].loot_drop():
+                        temp_list = dungeon_floor_monsters[mindex].loot_drop()
+                        player_inv.add_item(*temp_list)
+                    kill_list.add_kill(dungeon_floor_monsters[mindex].return_name())
+                    mindex += 1
+            else:
+                print(
+                    f"The {dungeon_floor_monsters[mindex].return_name()} has damaged you! You have taken {dungeon_floor_monsters[mindex].return_dmg()}"
+                )
+                nobody.take_damage(dungeon_floor_monsters[mindex].return_dmg())
+                print(f"You have {nobody.return_health()} health remaining")
+                if nobody.return_health() <= 0:
+                    print(f"You have died")
+                    print("You Killed: ")
+                    for kills in kill_list.return_list():
+                        print(kills)
+                    break
+            print("---------------------")
+            new_game.increment_turn()
+        else:
+            clear()
+            print(f"{action} Unkown Action")
