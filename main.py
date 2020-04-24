@@ -84,7 +84,8 @@ def bio():
     )
 
 dungeon_map=Dungeon_map()
-dungeon_map.generate_map_array("02")
+dungeon_floor_level = 1
+
 
 entities = Entity_List()
 
@@ -96,7 +97,7 @@ weaponlist = serialise_list("data/weapons.csv")
 itemslist = serialise_list("data/items.csv")
 #monsterlist = serialise_objects(monster.Monster, "monsters.csv")
 dungeon_floor_list = serialise_list("data/dungeonlevel.csv")
-dungeon_floor_level = 1
+
 
 new_game = Game()
 new_game.setup()
@@ -127,6 +128,7 @@ while True:
     # this used to change the level when we were using the end of the monster list to generate things, most of this is probably unecessary now
 
     if new_floor_load == True:
+        dungeon_map.generate_map_array(FLOOR_LEVELS[dungeon_floor_level])
         create_dungeon_floor_monster_list(dungeon_floor_list[dungeon_floor_level][3],entities)
         new_floor_load = False
 
@@ -182,6 +184,9 @@ while True:
 
         elif action == "a":
             clear()
+
+            # need to create a way better combat engine
+
             attackroll = nobody.attack()
             print(f"You perform an attack scoring a {attackroll}")
             monsterattackroll = randint(0, 6) + combat_with_monster.return_attack()

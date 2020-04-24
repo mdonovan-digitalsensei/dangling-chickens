@@ -89,8 +89,13 @@ class Player:
             if entity[0] == test_x and entity[1] == test_y:
                 return entity[3]       
         if map_array[test_y - 1][test_x] == "x":
-            return True
+            return "x"
+        if map_array[test_y - 1][test_x] == "s":
+            return "s"
 
         self.x += x
         self.y += y
+
+    def scan(self):
+        pass
           
